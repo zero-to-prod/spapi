@@ -67,8 +67,9 @@ $Spapi = Spapi::from($Token['response']['restrictedDataToken']);
 // Access the orders api and get an order.
 $Order = $Spapi->orders()->getOrder('111-5803802-7417822');
 
-// Access the order details.
+// Access the order details or an error.
 echo $Order['response']['payload']['AmazonOrderId'];
+echo $Order['response']['errors']['code'];
 ```
 
 ## Contributing
