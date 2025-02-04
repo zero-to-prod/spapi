@@ -4,7 +4,7 @@ namespace Zerotoprod\Spapi\Lwa;
 
 use Zerotoprod\SpapiTokens\SpapiTokens;
 
-class Rdt
+class Tokens
 {
     /**
      * @var array
