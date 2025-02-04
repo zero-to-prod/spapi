@@ -1,6 +1,6 @@
 <?php
 
-namespace Zerotoprod\Spapi\Tokens;
+namespace Zerotoprod\Spapi;
 
 use Zerotoprod\SpapiTokens\SpapiTokens;
 
