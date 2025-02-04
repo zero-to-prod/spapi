@@ -1,6 +1,6 @@
 <?php
 
-namespace Zerotoprod\Spapi\Lwa;
+namespace Zerotoprod\Spapi;
 
 use Zerotoprod\SpapiTokens\SpapiTokens;
 

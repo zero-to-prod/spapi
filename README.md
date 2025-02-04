@@ -43,8 +43,8 @@ This will add the package to your project’s dependencies and create an autoloa
 Get an order with a Restricted Data Token.
 
 ```php
-use Zerotoprod\Spapi\Lwa\Lwa;
-use Zerotoprod\Spapi\Lwa\Tokens;
+use Zerotoprod\Spapi\Lwa;
+use Zerotoprod\Spapi\Tokens;
 use Zerotoprod\Spapi\Spapi;
 
 // Login With Amazon
@@ -67,8 +67,9 @@ $Spapi = Spapi::from($Token['response']['restrictedDataToken']);
 // Access the orders api and get an order.
 $Order = $Spapi->orders()->getOrder('111-5803802-7417822');
 
-// Access the order details.
+// Access the order details or an error.
 echo $Order['response']['payload']['AmazonOrderId'];
+echo $Order['response']['errors']['code'];
 ```
 
 ## Contributing
