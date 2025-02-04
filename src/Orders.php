@@ -1,6 +1,6 @@
 <?php
 
-namespace Zerotoprod\Spapi\Orders;
+namespace Zerotoprod\Spapi;
 
 use Zerotoprod\SpapiOrders\SpapiOrders;
 
