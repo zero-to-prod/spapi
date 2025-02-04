@@ -43,8 +43,8 @@ This will add the package to your project’s dependencies and create an autoloa
 Get an order with a Restricted Data Token.
 
 ```php
-use Zerotoprod\Spapi\Lwa\Lwa;
-use Zerotoprod\Spapi\Tokens\Tokens;
+use Zerotoprod\Spapi\Lwa;
+use Zerotoprod\Spapi\Tokens;
 use Zerotoprod\Spapi\Spapi;
 
 // Login With Amazon
