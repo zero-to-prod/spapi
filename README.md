@@ -44,7 +44,7 @@ Get an order with a Restricted Data Token.
 
 ```php
 use Zerotoprod\Spapi\Lwa\Lwa;
-use Zerotoprod\Spapi\Lwa\Tokens;
+use Zerotoprod\Spapi\Tokens\Tokens;
 use Zerotoprod\Spapi\Spapi;
 
 // Login With Amazon
