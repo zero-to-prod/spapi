@@ -4,3 +4,7 @@
 /.phpunit.result.cache
 /.phpunit.cache/
 /.env
+/.vendor/
+/.env
+/.vendor/
+/.env
