@@ -2,8 +2,6 @@
 
 namespace Zerotoprod\Spapi;
 
-use Zerotoprod\Spapi\Orders\Orders;
-
 class Spapi
 {
     public $access_token;
