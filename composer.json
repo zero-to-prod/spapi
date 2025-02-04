@@ -1,14 +1,14 @@
 {
-  "name": "zero-to-prod/:slug",
-  "description": ":description",
+  "name": "zero-to-prod/spapi",
+  "description": "A PHP client library for Amazon's Selling Partner API.",
   "license": "MIT",
   "type": "library",
   "keywords": [
     "zero-to-prod",
-    ":slug"
+    "spapi"
   ],
   "readme": "./README.md",
-  "time": ":time",
+  "time": "2025-02-02",
   "authors": [
     {
       "name": "David Smith",
@@ -17,13 +17,13 @@
       "role": "maintainer"
     }
   ],
-  "homepage": "https://github.com/zero-to-prod/:slug",
+  "homepage": "https://github.com/zero-to-prod/spapi",
   "support": {
     "email": "dave0016@gmail.com",
-    "issues": "https://github.com/zero-to-prod/:slug/issues",
-    "source": "https://github.com/zero-to-prod/:slug",
-    "docs": "https://zero-to-prod.github.io/:slug/",
-    "security": "https://github.com/zero-to-prod/:slug/blob/main/SECURITY.md"
+    "issues": "https://github.com/zero-to-prod/spapi/issues",
+    "source": "https://github.com/zero-to-prod/spapi",
+    "docs": "https://zero-to-prod.github.io/spapi/",
+    "security": "https://github.com/zero-to-prod/spapi/blob/main/SECURITY.md"
   },
   "funding": [
     {
@@ -32,23 +32,25 @@
     }
   ],
   "require": {
-    "php": ">=7.1"
+    "php": ">=7.1",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "zero-to-prod/spapi-lwa": "^1.0",
+    "zero-to-prod/curl-helper": "^1.0",
+    "zero-to-prod/spapi-tokens-sdk": "^1.0",
+    "zero-to-prod/spapi-orders": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
-    "zero-to-prod/package-helper": "^1.0"
+    "phpunit/phpunit": "*"
   },
   "autoload": {
     "psr-4": {
-      "Zerotoprod\\:namespace\\": "src/"
+      "Zerotoprod\\Spapi\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests/"
     }
-  },
-  "bin": [
-    "bin/:slug"
-  ]
+  }
 }
