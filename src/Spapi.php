@@ -15,7 +15,7 @@ class Spapi
         $this->endpoint = $endpoint;
     }
 
-    public static function config(string $access_token, string $endpoint): self
+    public static function from(string $access_token, string $endpoint): self
     {
         return new self($access_token, $endpoint);
     }
