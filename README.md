@@ -111,7 +111,7 @@ use Zerotoprod\Spapi\Spapi;
 // Create an Instance of the Spapi service with an access token. 
 $Spapi = Spapi::from($access_token);
 
-// Access the orders api and get an order.
+// Access the orders api and get orders.
 $Order = $Spapi->orders()
   ->getOrders(
       ['MarketplaceIds']
