@@ -8,19 +8,19 @@ class Orders
 {
     public $access_token;
     public $base_uri;
+    public $user_agent;
 
-    public function __construct(string $access_token, string $base_uri)
+    public function __construct(string $access_token, string $base_uri, ?string $user_agent = null)
     {
         $this->access_token = $access_token;
         $this->base_uri = $base_uri;
+        $this->user_agent = $user_agent;
     }
 
     /**
      * Returns the order that you specify.
      *
      * @param               $orderId
-     * @param  array        $options
-     * @param  string|null  $user_agent
      *
      * @return array{
      *     info: array{
@@ -131,14 +131,13 @@ class Orders
      * }
      * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderid
      */
-    public function getOrder($orderId, array $options = [], ?string $user_agent = null): array
+    public function getOrder($orderId): array
     {
         return SpapiOrders::getOrder(
             $this->base_uri,
             $this->access_token,
             $orderId,
-            $options,
-            $user_agent
+            $this->user_agent
         );
     }
 
@@ -214,8 +213,6 @@ class Orders
      * @param  ?string  $EarliestDeliveryDateAfter        Use this date to select orders with a earliest delivery date after (or at) a specified time. The date must be in [ISO 8601](https://developer-docs.amazon.com/sp-api/docs/iso-8601) format.
      * @param  ?string  $LatestDeliveryDateBefore         Use this date to select orders with a latest delivery date before (or at) a specified time. The date must be in [ISO 8601](https://developer-docs.amazon.com/sp-api/docs/iso-8601) format.
      * @param  ?string  $LatestDeliveryDateAfter          Use this date to select orders with a latest delivery date after (or at) a specified time. The date must be in [ISO 8601](https://developer-docs.amazon.com/sp-api/docs/iso-8601) format.
-     * @param  array    $options                          Merge curl options.
-     * @param ?string   $user_agent                       The user-agent for the request. If none is supplied, a default one will be provided.
      *
      * @return array{
      *     "info": array{
@@ -349,9 +346,7 @@ class Orders
         ?string $EarliestDeliveryDateBefore = null,
         ?string $EarliestDeliveryDateAfter = null,
         ?string $LatestDeliveryDateBefore = null,
-        ?string $LatestDeliveryDateAfter = null,
-        array $options = [],
-        string $user_agent = null
+        ?string $LatestDeliveryDateAfter = null
     ): array {
         return SpapiOrders::getOrders(
             $this->base_uri,
@@ -378,8 +373,7 @@ class Orders
             $EarliestDeliveryDateAfter,
             $LatestDeliveryDateBefore,
             $LatestDeliveryDateAfter,
-            $options,
-            $user_agent
+            $this->user_agent
         );
     }
 }
