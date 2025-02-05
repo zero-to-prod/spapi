@@ -112,7 +112,36 @@ use Zerotoprod\Spapi\Spapi;
 $Spapi = Spapi::from($access_token);
 
 // Access the orders api and get an order.
-$Order = $Spapi->orders()->getOrders('111-5803802-7417822');
+$Order = $Spapi->orders()
+->getOrders(
+    ['MarketplaceIds']
+    'CreatedAfter'
+    'CreatedBefore'
+    'LastUpdatedAfter'
+    'LastUpdatedBefore'
+    '[OrderStatuses']
+    ['FulfillmentChannels']
+    ['PaymentMethods']
+    'BuyerEmail'
+    'SellerOrderId'
+    MaxResultsPerPage
+    ['EasyShipShipmentStatuses']
+    ['ElectronicInvoiceStatuses']
+    'NextToken'
+    ['AmazonOrderIds']
+    'ActualFulfillmentSupplySourceId'
+    'IsISPU'
+    'StoreChainStoreId'
+    'EarliestDeliveryDateBefore'
+    'EarliestDeliveryDateAfter'
+    'LatestDeliveryDateBefore'
+    'LatestDeliveryDateAfter'
+    [
+        'curl_options' => 'arbitrary',
+        CURLOPT_RETURNTRANSFER => true
+    ],
+    'user-agent'
+);
 
 // Access the order details or an error.
 echo $Order['response']['payload']['Orders'][0]['AmazonOrderId']
