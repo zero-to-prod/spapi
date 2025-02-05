@@ -16,7 +16,13 @@
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Authentication](#authentication)
+    - [Refresh Token](#refresh-token)
+    - [Client Credentials](#client-credentials)
+    - [Restricted Data Token](#restricted-data-token)
+- [Orders Api](#orders-api)
+    - [getOrder](#getorder)
+    - [getOrders](#getorders)
 - [Local Development](./LOCAL_DEVELOPMENT.md)
 - [Contributing](#contributing)
 
@@ -38,37 +44,78 @@ composer require zero-to-prod/spapi
 
 This will add the package to your project’s dependencies and create an autoloader entry for it.
 
-## Usage
+## Authentication
 
-Get an order with a Restricted Data Token.
+### Refresh Token
 
 ```php
 use Zerotoprod\Spapi\Lwa;
-use Zerotoprod\Spapi\Tokens;
-use Zerotoprod\Spapi\Spapi;
 
-// Login With Amazon
 $access_token = Lwa::from(
     'amzn1.application-oa2-client.xxx',
     'amzn1.oa2-cs.v1.xxx',
     'Atzr|xxx'
-)->refreshToken();
+)->refreshToken()['response']['access_token'];
+```
 
+### Client Credentials
+
+```php
+use Zerotoprod\Spapi\Lwa;
+
+$access_token = Lwa::from(
+    'amzn1.application-oa2-client.xxx',
+    'amzn1.oa2-cs.v1.xxx',
+    'Atzr|xxx'
+)->clientCredentials('scope')['response']['access_token'];
+```
+
+### Restricted Data Token
+
+```php
 // Use the Tokens API to get an RDT (Restricted Data Token)
-$Token = Tokens::from(
-    $access_token['response']['access_token'],
+$access_token = Tokens::from(
+    'access_token',
     ['buyerInfo', 'shippingAddress'],
     'amzn1.sp.solution.xxx'
-)->order('123-1234567-1234567');
+)->order('123-1234567-1234567')['response']['restrictedDataToken'];
+```
+
+## Orders Api
+
+### getOrder
+
+Get an order.
+
+```php
+use Zerotoprod\Spapi\Spapi;
 
 // Create an Instance of the Spapi service with an access token. 
-$Spapi = Spapi::from($Token['response']['restrictedDataToken']);
+$Spapi = Spapi::from($access_token);
 
 // Access the orders api and get an order.
 $Order = $Spapi->orders()->getOrder('111-5803802-7417822');
 
 // Access the order details or an error.
 echo $Order['response']['payload']['AmazonOrderId'];
+echo $Order['response']['errors']['code'];
+```
+
+### getOrders
+
+Get orders.
+
+```php
+use Zerotoprod\Spapi\Spapi;
+
+// Create an Instance of the Spapi service with an access token. 
+$Spapi = Spapi::from($access_token);
+
+// Access the orders api and get an order.
+$Order = $Spapi->orders()->getOrders('111-5803802-7417822');
+
+// Access the order details or an error.
+echo $Order['response']['payload']['Orders'][0]['AmazonOrderId']
 echo $Order['response']['errors']['code'];
 ```
 
