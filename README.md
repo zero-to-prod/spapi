@@ -113,34 +113,34 @@ $Spapi = Spapi::from($access_token);
 
 // Access the orders api and get an order.
 $Order = $Spapi->orders()
-->getOrders(
-    ['MarketplaceIds']
-    'CreatedAfter'
-    'CreatedBefore'
-    'LastUpdatedAfter'
-    'LastUpdatedBefore'
-    '[OrderStatuses']
-    ['FulfillmentChannels']
-    ['PaymentMethods']
-    'BuyerEmail'
-    'SellerOrderId'
-    MaxResultsPerPage
-    ['EasyShipShipmentStatuses']
-    ['ElectronicInvoiceStatuses']
-    'NextToken'
-    ['AmazonOrderIds']
-    'ActualFulfillmentSupplySourceId'
-    'IsISPU'
-    'StoreChainStoreId'
-    'EarliestDeliveryDateBefore'
-    'EarliestDeliveryDateAfter'
-    'LatestDeliveryDateBefore'
-    'LatestDeliveryDateAfter'
-    [
-        'curl_options' => 'arbitrary',
-        CURLOPT_RETURNTRANSFER => true
-    ],
-    'user-agent'
+  ->getOrders(
+      ['MarketplaceIds']
+      'CreatedAfter'
+      'CreatedBefore'
+      'LastUpdatedAfter'
+      'LastUpdatedBefore'
+      '[OrderStatuses']
+      ['FulfillmentChannels']
+      ['PaymentMethods']
+      'BuyerEmail'
+      'SellerOrderId'
+      MaxResultsPerPage
+      ['EasyShipShipmentStatuses']
+      ['ElectronicInvoiceStatuses']
+      'NextToken'
+      ['AmazonOrderIds']
+      'ActualFulfillmentSupplySourceId'
+      'IsISPU'
+      'StoreChainStoreId'
+      'EarliestDeliveryDateBefore'
+      'EarliestDeliveryDateAfter'
+      'LatestDeliveryDateBefore'
+      'LatestDeliveryDateAfter'
+      [
+          'curl_options' => 'arbitrary',
+          CURLOPT_RETURNTRANSFER => true
+      ],
+      'user-agent'
 );
 
 // Access the order details or an error.
