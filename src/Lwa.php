@@ -27,12 +27,12 @@ class Lwa
         string $clientId,
         string $clientSecret,
         ?string $user_agent = null,
-        string $endpoint = 'https://api.amazon.com/auth/o2/token'
+        string $base_uri = 'https://api.amazon.com/auth/o2/token'
     ) {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->user_agent = $user_agent;
-        $this->endpoint = $endpoint;
+        $this->endpoint = $base_uri;
     }
 
     public static function from(
