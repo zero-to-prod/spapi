@@ -121,9 +121,9 @@ class Orders
      *             ShipmentServiceLevelCategory: string
      *         },
      *          errors: array{
-     *           code: string,
-     *           message: string,
-     *           details: string
+     *              code: string,
+     *              message: string,
+     *              details: string
      *          }
      *     }
      * }
@@ -131,6 +131,6 @@ class Orders
      */
     public function getOrder($orderId): array
     {
-        return SpapiOrders::getOrder($this->base_url.'/orders/v0/orders/'.$orderId, $this->access_token);
+        return SpapiOrders::getOrder($this->base_url, $this->access_token, $orderId);
     }
 }
