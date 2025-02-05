@@ -63,4 +63,16 @@ class Tokens
             $this->endpoint
         );
     }
+
+    public function orders(): array
+    {
+        return SpapiTokens::createRestrictedDataToken(
+            $this->access_token,
+            '/orders/v0/orders',
+            $this->dataElements,
+            $this->delegatee,
+            $this->user_agent,
+            $this->endpoint
+        );
+    }
 }
