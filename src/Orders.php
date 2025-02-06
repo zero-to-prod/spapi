@@ -12,7 +12,7 @@ use Zerotoprod\SpapiOrders\SpapiOrders;
  * you can develop fast, flexible, and custom applications to manage order synchronization, perform
  * order research, and create demand-based decision support tools.
  *
- * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderid
+ * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference
  */
 class Orders
 {
@@ -34,6 +34,8 @@ class Orders
     private $options;
 
     /**
+     * Instantiate this class.
+     *
      * @param  string       $access_token  Access token to validate the request.
      * @param  string       $base_uri      The base URI for the Orders API
      * @param  string|null  $user_agent    The user-agent for the request. If none is supplied, a default one will be provided.
@@ -546,7 +548,7 @@ class Orders
      *          }
      *      }
      * }
-     * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderid
+     * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderidorderitems
      */
     public function getOrderItems(string $orderId, array $options = []): array
     {
