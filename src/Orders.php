@@ -1,26 +1,62 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zerotoprod\Spapi;
 
 use Zerotoprod\SpapiOrders\SpapiOrders;
 
+/**
+ * Use the Orders Selling Partner API to programmatically retrieve order information. With this API,
+ * you can develop fast, flexible, and custom applications to manage order synchronization, perform
+ * order research, and create demand-based decision support tools.
+ *
+ * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderid
+ */
 class Orders
 {
-    public $access_token;
-    public $base_uri;
-    public $user_agent;
+    /**
+     * @var string
+     */
+    private $access_token;
+    /**
+     * @var string
+     */
+    private $base_uri;
+    /**
+     * @var string|null
+     */
+    private $user_agent;
+    /**
+     * @var array
+     */
+    private $options;
 
-    public function __construct(string $access_token, string $base_uri, ?string $user_agent = null)
-    {
+    /**
+     * @param  string       $access_token  Access token to validate the request.
+     * @param  string       $base_uri      The base URI for the Orders API
+     * @param  string|null  $user_agent    The user-agent for the request. If none is supplied, a default one will be provided.
+     * @param  array        $options       Merve curl options.
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference
+     */
+    public function __construct(
+        string $access_token,
+        string $base_uri,
+        ?string $user_agent = null,
+        array $options = []
+    ) {
         $this->access_token = $access_token;
         $this->base_uri = $base_uri;
         $this->user_agent = $user_agent;
+        $this->options = $options;
     }
 
     /**
      * Returns the order that you specify.
      *
-     * @param               $orderId
+     * @param  string  $orderId  Amazon Order Id
+     * @param  array   $options  Merge curl options
      *
      * @return array{
      *     info: array{
@@ -131,17 +167,20 @@ class Orders
      * }
      * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderid
      */
-    public function getOrder($orderId): array
+    public function getOrder(string $orderId, array $options = []): array
     {
         return SpapiOrders::getOrder(
             $this->base_uri,
             $this->access_token,
             $orderId,
-            $this->user_agent
+            $this->user_agent,
+            array_merge($this->options, $options)
         );
     }
 
     /**
+     * Returns orders that are created or updated during the specified time period. If you want to return specific types of orders, you can apply filters to your request. NextToken doesn't affect any filters that you include in your request; it only impacts the pagination for the filtered orders response.
+     *
      * @param  array    $MarketplaceIds                   A list of `MarketplaceId` values. Used to select orders that were placed in the specified marketplaces.
      *
      * Refer to [Marketplace IDs](https://developer-docs.amazon.com/sp-api/docs/marketplace-ids) for a complete list of `marketplaceId` values.
@@ -213,6 +252,7 @@ class Orders
      * @param  ?string  $EarliestDeliveryDateAfter        Use this date to select orders with a earliest delivery date after (or at) a specified time. The date must be in [ISO 8601](https://developer-docs.amazon.com/sp-api/docs/iso-8601) format.
      * @param  ?string  $LatestDeliveryDateBefore         Use this date to select orders with a latest delivery date before (or at) a specified time. The date must be in [ISO 8601](https://developer-docs.amazon.com/sp-api/docs/iso-8601) format.
      * @param  ?string  $LatestDeliveryDateAfter          Use this date to select orders with a latest delivery date after (or at) a specified time. The date must be in [ISO 8601](https://developer-docs.amazon.com/sp-api/docs/iso-8601) format.
+     * @param  array    $options                          Merge curl options
      *
      * @return array{
      *     "info": array{
@@ -323,6 +363,8 @@ class Orders
      *       }
      *     }
      *   }
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0orders
      */
     public function getOrders(
         array $MarketplaceIds,
@@ -346,7 +388,8 @@ class Orders
         ?string $EarliestDeliveryDateBefore = null,
         ?string $EarliestDeliveryDateAfter = null,
         ?string $LatestDeliveryDateBefore = null,
-        ?string $LatestDeliveryDateAfter = null
+        ?string $LatestDeliveryDateAfter = null,
+        array $options = []
     ): array {
         return SpapiOrders::getOrders(
             $this->base_uri,
@@ -373,7 +416,8 @@ class Orders
             $EarliestDeliveryDateAfter,
             $LatestDeliveryDateBefore,
             $LatestDeliveryDateAfter,
-            $this->user_agent
+            $this->user_agent,
+            array_merge($this->options, $options)
         );
     }
 }
