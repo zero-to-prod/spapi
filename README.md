@@ -21,8 +21,9 @@
     - [Client Credentials](#client-credentials)
     - [Restricted Data Token](#restricted-data-token)
 - [Orders Api](#orders-api)
-    - [getOrder](#getorder)
     - [getOrders](#getorders)
+    - [getOrder](#getorder)
+    - [getOrderItems](#getorderitems)
 - [Local Development](./LOCAL_DEVELOPMENT.md)
 - [Contributing](#contributing)
 
@@ -48,40 +49,57 @@ This will add the package to your project’s dependencies and create an autoloa
 
 ### Refresh Token
 
+Use this for calling operations that require authorization from a selling partner. All operations that are not grantless operations require
+authorization from a selling partner. When specifying this value, include the rrefresh_token parameter.
+
 ```php
 use Zerotoprod\Spapi\Lwa;
 
-$access_token = Lwa::from(
-    'amzn1.application-oa2-client.xxx',
-    'amzn1.oa2-cs.v1.xxx',
-    'https://api.amazon.com/auth/o2/token','Atzr|xxx'
-)->refreshToken()['response']['access_token'];
+$response = Lwa::from(
+    'amzn1.application-oa2-client.xxx', // client_id
+    'amzn1.oa2-cs.v1.xxx'               // client_secret
+)->refreshToken();
+
+$access_token = $response['response']['access_token'];
 ```
 
 ### Client Credentials
 
+Use this for calling grantless operations. When specifying this value, include the scope parameter.
+
 ```php
 use Zerotoprod\Spapi\Lwa;
 
-$access_token = Lwa::from(
-    'amzn1.application-oa2-client.xxx',
-    'amzn1.oa2-cs.v1.xxx',
-    'https://api.amazon.com/auth/o2/token','Atzr|xxx'
-)->clientCredentials('scope')['response']['access_token'];
+$response = Lwa::from(
+    'amzn1.application-oa2-client.xxx', // client_id
+    'amzn1.oa2-cs.v1.xxx',              // client_secret
+)->clientCredentials('scope');
+
+$access_token = $response['response']['access_token'];
 ```
 
 ### Restricted Data Token
 
+Use the access token received from [Login With Amazon](#refresh-token);
+
 ```php
+use Zerotoprod\Spapi\Tokens;
+
 // Use the Tokens API to get an RDT (Restricted Data Token)
-$access_token = Tokens::from(
-    'access_token',
-    ['buyerInfo', 'shippingAddress'],
-    'amzn1.sp.solution.xxx'
-)->order('123-1234567-1234567')['response']['restrictedDataToken'];
+$response = Tokens::from(
+    'access_token',                     // Access token received from LWA
+    'amzn1.sp.solution.xxx'             // Target Application
+)->order(
+    '123-1234567-1234567',              // Amazon Order Id
+    ['buyerInfo', 'shippingAddress']    // Restricted Data Elements to Access
+);
+
+$access_token = $response['response']['restrictedDataToken'];
 ```
+
 ## Spapi
-Instantiate the Spapi like this:
+
+Instantiate the Spapi from an `access_token` generated from [Login With Amazon](#refresh-token) or a [Restricted Data Token](#restricted-data-token)
 
 ```php
 use Zerotoprod\Spapi\Spapi;
@@ -91,37 +109,23 @@ $Spapi = Spapi::from($access_token);
 
 ## Orders Api
 
-### getOrder
+Programmatically retrieve order information.
 
-Get an order.
-
-```php
-use Zerotoprod\Spapi\Spapi;
-
-$Spapi = Spapi::from($access_token);
-$Order = $Spapi->orders()
-    ->getOrder('111-5803802-7417822', ['curl_options']);
-
-// Access the order.
-echo $Order['response']['payload']['AmazonOrderId'];
-
-// Access errors.
-echo $Order['response']['errors']['code'];
-```
+Use the Orders Selling Partner API to programmatically retrieve order information. With this API, you can develop fast, flexible, and custom
+applications to manage order synchronization, perform order research, and create demand-based decision support tools.
 
 ### getOrders
 
-Get orders.
+Returns orders that are created or updated during the specified time period. If you want to return specific types of orders, you can apply filters to
+your request. NextToken doesn't affect any filters that you include in your request; it only impacts the pagination for the filtered orders response.
 
 ```php
 use Zerotoprod\Spapi\Spapi;
 
-// Create an Instance of the Spapi service with an access token. 
-$Spapi = Spapi::from($access_token);
-
 // Access the orders api and get orders.
-$Order = $Spapi->orders()
-  ->getOrders(
+$Order = Spapi::from($access_token)
+    ->orders()
+    ->getOrders(
       ['MarketplaceIds']
       'CreatedAfter'
       'CreatedBefore'
@@ -149,6 +153,48 @@ $Order = $Spapi->orders()
 
 // Access the orders.
 echo $Order['response']['payload']['Orders'][0]['AmazonOrderId']
+
+// Access errors.
+echo $Order['response']['errors']['code'];
+```
+
+### getOrder
+
+Returns the order that you specify.
+
+```php
+use Zerotoprod\Spapi\Spapi;
+
+$Order = Spapi::from($access_token)
+    ->orders()
+    ->getOrder('111-5803802-7417822', ['curl_options']);
+
+// Access the order.
+echo $Order['response']['payload']['AmazonOrderId'];
+
+// Access errors.
+echo $Order['response']['errors']['code'];
+```
+
+### getOrderItems
+
+Returns detailed order item information for the order that you specify. If NextToken is provided, it's used to retrieve the next page of order items.
+
+Note: When an order is in the Pending state (the order has been placed but payment has not been authorized), the getOrderItems operation does not
+return information about pricing, taxes, shipping charges, gift status or promotions for the order items in the order. After an order leaves the
+Pending state (this occurs when payment has been authorized) and enters the Unshipped, Partially Shipped, or Shipped state, the getOrderItems
+operation returns information about pricing, taxes, shipping charges, gift status and promotions for the order items in the order.
+
+```php
+use Zerotoprod\Spapi\Spapi;
+
+
+$Order = Spapi::from($access_token)
+    ->orders()
+    ->getOrderItems('111-5803802-7417822', ['curl_options']);
+
+// Access the order.
+echo $Order['response']['payload']['OrderItems'][0]['SellerSKU'];
 
 // Access errors.
 echo $Order['response']['errors']['code'];
