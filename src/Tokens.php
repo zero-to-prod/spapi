@@ -132,8 +132,8 @@ class Tokens
             '/orders/v0/orders/'.$order_id,
             $this->dataElements,
             $this->targetApplication,
-            $this->user_agent,
             $this->base_uri,
+            $this->user_agent,
             array_merge($this->options, $options)
         );
     }
