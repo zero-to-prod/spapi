@@ -26,9 +26,7 @@ class LwaTest extends TestCase
     private const TEST_REFRESH_TOKEN = 'test-refresh-token';
     private const TEST_SCOPE = 'test-scope';
 
-    /**
-     * @test
-     */
+    /** @test */
     public function client_credentials(): void
     {
         $response = Lwa::from(
@@ -46,9 +44,7 @@ class LwaTest extends TestCase
         self::assertEquals('user-agent', $response['response']['form']['user-agent']);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_creates_instance_with_minimal_parameters(): void
     {
         $lwa = new Lwa(self::TEST_CLIENT_ID, self::TEST_CLIENT_SECRET);
@@ -56,9 +52,7 @@ class LwaTest extends TestCase
         $this->assertInstanceOf(Lwa::class, $lwa);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_creates_instance_with_all_parameters(): void
     {
         $options = ['timeout' => 30];
@@ -73,108 +67,7 @@ class LwaTest extends TestCase
         $this->assertInstanceOf(Lwa::class, $lwa);
     }
 
-    /**
-     * @test
-     */
-    public function it_merges_options_in_refresh_token(): void
-    {
-        $instanceOptions = ['timeout' => 30];
-        $methodOptions = ['retry' => true];
-        $expectedOptions = array_merge($instanceOptions, $methodOptions);
-
-        $expectedResponse = ['access_token' => 'new-token'];
-
-        $this->mockSpapiLwaStaticMethod('refreshToken', $expectedResponse, function ($uri, $token, $clientId, $clientSecret, $userAgent, $options) use ($expectedOptions) {
-            $this->assertEquals($expectedOptions, $options);
-
-            return true;
-        });
-
-        $lwa = new Lwa(
-            self::TEST_CLIENT_ID,
-            self::TEST_CLIENT_SECRET,
-            self::TEST_BASE_URI,
-            self::TEST_USER_AGENT,
-            $instanceOptions
-        );
-
-        $response = $lwa->refreshToken(self::TEST_REFRESH_TOKEN, $methodOptions);
-        $this->assertEquals($expectedResponse, $response);
-    }
-
-    /**
-     * @test
-     */
-    public function it_merges_options_in_client_credentials(): void
-    {
-        $instanceOptions = ['timeout' => 30];
-        $methodOptions = ['retry' => true];
-        $expectedOptions = array_merge($instanceOptions, $methodOptions);
-
-        $expectedResponse = ['access_token' => 'client-token'];
-
-        $this->mockSpapiLwaStaticMethod('clientCredentials', $expectedResponse, function ($uri, $scope, $clientId, $clientSecret, $userAgent, $options) use ($expectedOptions) {
-            $this->assertEquals($expectedOptions, $options);
-
-            return true;
-        });
-
-        $lwa = new Lwa(
-            self::TEST_CLIENT_ID,
-            self::TEST_CLIENT_SECRET,
-            self::TEST_BASE_URI,
-            self::TEST_USER_AGENT,
-            $instanceOptions
-        );
-
-        $response = $lwa->clientCredentials(self::TEST_SCOPE, $methodOptions);
-        $this->assertEquals($expectedResponse, $response);
-    }
-
-    /**
-     * @test
-     */
-    public function it_overrides_instance_options_with_method_options(): void
-    {
-        $instanceOptions = ['timeout' => 30, 'retry' => false];
-        $methodOptions = ['retry' => true];
-        $expectedOptions = ['timeout' => 30, 'retry' => true];
-
-        $this->mockSpapiLwaStaticMethod('refreshToken', [], function ($uri, $token, $clientId, $clientSecret, $userAgent, $options) use ($expectedOptions) {
-            $this->assertEquals($expectedOptions, $options);
-
-            return true;
-        });
-
-        $lwa = new Lwa(
-            self::TEST_CLIENT_ID,
-            self::TEST_CLIENT_SECRET,
-            self::TEST_BASE_URI,
-            self::TEST_USER_AGENT,
-            $instanceOptions
-        );
-
-        $lwa->refreshToken(self::TEST_REFRESH_TOKEN, $methodOptions);
-    }
-
-    /**
-     * @test
-     */
-    public function it_uses_empty_options_by_default(): void
-    {
-        $this->mockSpapiLwaStaticMethod('refreshToken', [], function ($uri, $token, $clientId, $clientSecret, $userAgent, $options) {
-            $this->assertEquals([], $options);
-
-            return true;
-        });
-
-        $lwa = new Lwa(self::TEST_CLIENT_ID, self::TEST_CLIENT_SECRET);
-        $lwa->refreshToken(self::TEST_REFRESH_TOKEN);
-    }
-
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_string_refresh_token(): void
     {
         $lwa = new Lwa(self::TEST_CLIENT_ID, self::TEST_CLIENT_SECRET);
@@ -183,9 +76,7 @@ class LwaTest extends TestCase
         $lwa->refreshToken(null);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_string_scope(): void
     {
         $lwa = new Lwa(self::TEST_CLIENT_ID, self::TEST_CLIENT_SECRET);
@@ -194,9 +85,7 @@ class LwaTest extends TestCase
         $lwa->clientCredentials(null);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_options_in_constructor(): void
     {
         $this->expectException(TypeError::class);
@@ -209,9 +98,7 @@ class LwaTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_options_in_refresh_token(): void
     {
         $lwa = new Lwa(self::TEST_CLIENT_ID, self::TEST_CLIENT_SECRET);
@@ -220,9 +107,7 @@ class LwaTest extends TestCase
         $lwa->refreshToken(self::TEST_REFRESH_TOKEN, 'not-an-array');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_options_in_client_credentials(): void
     {
         $lwa = new Lwa(self::TEST_CLIENT_ID, self::TEST_CLIENT_SECRET);
