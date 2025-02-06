@@ -96,10 +96,16 @@ $Spapi = Spapi::from($access_token);
 Get an order.
 
 ```php
-$Order = $Spapi->orders()->getOrder('111-5803802-7417822');
+use Zerotoprod\Spapi\Spapi;
 
-// Access the order details or an error.
+$Spapi = Spapi::from($access_token);
+$Order = $Spapi->orders()
+    ->getOrder('111-5803802-7417822', ['curl_options']);
+
+// Access the order.
 echo $Order['response']['payload']['AmazonOrderId'];
+
+// Access errors.
 echo $Order['response']['errors']['code'];
 ```
 
@@ -138,14 +144,13 @@ $Order = $Spapi->orders()
       'EarliestDeliveryDateAfter'
       'LatestDeliveryDateBefore'
       'LatestDeliveryDateAfter'
-      [
-          'curl_options' => 'arbitrary',
-          CURLOPT_RETURNTRANSFER => true
-      ],
+      ['curl_options'],
 );
 
-// Access the order details or an error.
+// Access the orders.
 echo $Order['response']['payload']['Orders'][0]['AmazonOrderId']
+
+// Access errors.
 echo $Order['response']['errors']['code'];
 ```
 
