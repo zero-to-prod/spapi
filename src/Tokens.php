@@ -4,6 +4,19 @@ namespace Zerotoprod\Spapi;
 
 use Zerotoprod\SpapiTokens\SpapiTokens;
 
+/**
+ * Call the Tokens API to get a Restricted Data Token (RDT) for restricted resources.
+ *
+ * The Selling Partner API for Tokens provides a secure way to access a customer's PII
+ * (Personally Identifiable Information). You can call the Tokens API to get a
+ * Restricted Data Token (RDT) for one or more restricted resources that you
+ * specify. The RDT authorizes subsequent calls to restricted operations
+ * that correspond to the restricted resources that you specified.
+ *
+ * For more information, see the Tokens API Use Case Guide.
+ *
+ * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
+ */
 class Tokens
 {
     /**
@@ -28,6 +41,17 @@ class Tokens
      */
     private $options;
 
+    /**
+     * Instantiate this class.
+     *
+     * @param  string       $access_token       The access token to create the RDT
+     * @param  string|null  $targetApplication  The application ID for the target application to which access is being
+     * @param  string       $base_uri           The URL for the api
+     * @param  string|null  $user_agent         The user-agent for the request
+     * @param  array        $options            Merge curl options
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
+     */
     public function __construct(
         string $access_token,
         ?string $targetApplication = null,
@@ -42,6 +66,17 @@ class Tokens
         $this->options = $options;
     }
 
+    /**
+     * A helper method for instantiation.
+     *
+     * @param  string       $access_token       The access token to create the RDT
+     * @param  string|null  $targetApplication  The application ID for the target application to which access is being
+     * @param  string       $base_uri           The URL for the api
+     * @param  string|null  $user_agent         The user-agent for the request
+     * @param  array        $options            Merge curl options
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
+     */
     public static function from(
         string $access_token,
         ?string $targetApplication = null,
@@ -118,6 +153,8 @@ class Tokens
      *      expiresIn: int,
      *      restrictedDataToken: string
      *  }
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
      */
     public function order(string $order_id, array $dataElements = [], array $options = []): array
     {
@@ -198,6 +235,8 @@ class Tokens
      *      expiresIn: int,
      *      restrictedDataToken: string
      *  }
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
      */
     public function orderItems(string $order_id, array $dataElements = [], array $options = []): array
     {
@@ -277,6 +316,8 @@ class Tokens
      *      expiresIn: int,
      *      restrictedDataToken: string
      *  }
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
      */
     public function orders(array $dataElements = [], array $options = []): array
     {

@@ -9,7 +9,7 @@ use Zerotoprod\SpapiLwa\SpapiLwa;
  * to take certain actions on behalf of a selling partner. An LWA
  * access token expires one hour after it is issued.
  *
- * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api#step-1-request-a-login-with-amazon-access-token
+ * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api
  */
 class Lwa
 {
@@ -35,11 +35,15 @@ class Lwa
     private $options;
 
     /**
+     * Instantiate the class.
+     *
      * @param  string       $client_id      Get this value when you register your application. Refer to Viewing your developer information.
      * @param  string       $client_secret  Get this value when you register your application. Refer to Viewing your developer information.
      * @param  string       $base_uri       The LWA authentication server
      * @param  string|null  $user_agent     The user-agent for the application
      * @param  array        $options        Merge curl options
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api
      */
     public function __construct(
         string $client_id,
@@ -56,11 +60,15 @@ class Lwa
     }
 
     /**
+     * A helper method for instantiation.
+     *
      * @param  string       $client_id      Get this value when you register your application. Refer to Viewing your developer information.
      * @param  string       $client_secret  Get this value when you register your application. Refer to Viewing your developer information.
      * @param  string       $base_uri       The LWA authentication server
      * @param  string|null  $user_agent     The user-agent for the application
      * @param  array        $options        Merge curl options
+     *
+     * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api
      */
     public static function from(
         string $client_id,
