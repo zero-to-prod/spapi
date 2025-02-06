@@ -54,7 +54,7 @@ use Zerotoprod\Spapi\Lwa;
 $access_token = Lwa::from(
     'amzn1.application-oa2-client.xxx',
     'amzn1.oa2-cs.v1.xxx',
-    'Atzr|xxx'
+    'https://api.amazon.com/auth/o2/token','Atzr|xxx'
 )->refreshToken()['response']['access_token'];
 ```
 
@@ -66,7 +66,7 @@ use Zerotoprod\Spapi\Lwa;
 $access_token = Lwa::from(
     'amzn1.application-oa2-client.xxx',
     'amzn1.oa2-cs.v1.xxx',
-    'Atzr|xxx'
+    'https://api.amazon.com/auth/o2/token','Atzr|xxx'
 )->clientCredentials('scope')['response']['access_token'];
 ```
 
@@ -80,6 +80,14 @@ $access_token = Tokens::from(
     'amzn1.sp.solution.xxx'
 )->order('123-1234567-1234567')['response']['restrictedDataToken'];
 ```
+## Spapi
+Instantiate the Spapi like this:
+
+```php
+use Zerotoprod\Spapi\Spapi;
+
+$Spapi = Spapi::from($access_token);
+```
 
 ## Orders Api
 
@@ -90,14 +98,14 @@ Get an order.
 ```php
 use Zerotoprod\Spapi\Spapi;
 
-// Create an Instance of the Spapi service with an access token. 
 $Spapi = Spapi::from($access_token);
+$Order = $Spapi->orders()
+    ->getOrder('111-5803802-7417822', ['curl_options']);
 
-// Access the orders api and get an order.
-$Order = $Spapi->orders()->getOrder('111-5803802-7417822');
-
-// Access the order details or an error.
+// Access the order.
 echo $Order['response']['payload']['AmazonOrderId'];
+
+// Access errors.
 echo $Order['response']['errors']['code'];
 ```
 
@@ -136,15 +144,13 @@ $Order = $Spapi->orders()
       'EarliestDeliveryDateAfter'
       'LatestDeliveryDateBefore'
       'LatestDeliveryDateAfter'
-      [
-          'curl_options' => 'arbitrary',
-          CURLOPT_RETURNTRANSFER => true
-      ],
-      'user-agent'
+      ['curl_options'],
 );
 
-// Access the order details or an error.
+// Access the orders.
 echo $Order['response']['payload']['Orders'][0]['AmazonOrderId']
+
+// Access errors.
 echo $Order['response']['errors']['code'];
 ```
 

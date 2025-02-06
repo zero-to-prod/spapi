@@ -4,53 +4,85 @@ namespace Zerotoprod\Spapi;
 
 use Zerotoprod\SpapiLwa\SpapiLwa;
 
+/**
+ * A Login with Amazon (LWA) access token authorizes your application
+ * to take certain actions on behalf of a selling partner. An LWA
+ * access token expires one hour after it is issued.
+ *
+ * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api#step-1-request-a-login-with-amazon-access-token
+ */
 class Lwa
 {
     /**
      * @var string
      */
-    private $clientId;
+    private $client_id;
     /**
      * @var string
      */
-    private $clientSecret;
+    private $client_secret;
     /**
      * @var string
      */
-    private $endpoint;
+    private $base_uri;
     /**
      * @var string|null
      */
     private $user_agent;
+    /**
+     * @var array
+     */
+    private $options;
 
+    /**
+     * @param  string       $client_id      Get this value when you register your application. Refer to Viewing your developer information.
+     * @param  string       $client_secret  Get this value when you register your application. Refer to Viewing your developer information.
+     * @param  string       $base_uri       The LWA authentication server
+     * @param  string|null  $user_agent     The user-agent for the application
+     * @param  array        $options        Merge curl options
+     */
     public function __construct(
-        string $clientId,
-        string $clientSecret,
+        string $client_id,
+        string $client_secret,
+        string $base_uri = 'https://api.amazon.com/auth/o2/token',
         ?string $user_agent = null,
-        string $base_uri = 'https://api.amazon.com/auth/o2/token'
+        array $options = []
     ) {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
+        $this->client_id = $client_id;
+        $this->client_secret = $client_secret;
+        $this->base_uri = $base_uri;
         $this->user_agent = $user_agent;
-        $this->endpoint = $base_uri;
+        $this->options = $options;
     }
 
+    /**
+     * @param  string       $client_id      Get this value when you register your application. Refer to Viewing your developer information.
+     * @param  string       $client_secret  Get this value when you register your application. Refer to Viewing your developer information.
+     * @param  string       $base_uri       The LWA authentication server
+     * @param  string|null  $user_agent     The user-agent for the application
+     * @param  array        $options        Merge curl options
+     */
     public static function from(
-        string $clientId,
-        string $clientSecret,
+        string $client_id,
+        string $client_secret,
+        string $base_uri = 'https://api.amazon.com/auth/o2/token',
         ?string $user_agent = null,
-        string $endpoint = 'https://api.amazon.com/auth/o2/token'
+        array $options = []
     ): self {
         return new self(
-            $clientId,
-            $clientSecret,
+            $client_id,
+            $client_secret,
+            $base_uri,
             $user_agent,
-            $endpoint
+            $options
         );
     }
 
     /**
      * Use this for calling operations that require authorization from a selling partner. All operations that are not grantless operations require authorization from a selling partner. When specifying this value, include the rrefresh_token parameter.
+     *
+     * @param  string  $refresh_token  The LWA refresh token. Get this value when the selling partner authorizes your application. For more information, refer to Authorizing Selling Partner API applications.
+     * @param  array   $options        Merge curl options
      *
      * @return array{
      *     info: array{
@@ -117,19 +149,25 @@ class Lwa
      *
      * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api#step-1-request-a-login-with-amazon-access-token
      */
-    public function refreshToken($refreshToken): array
+    public function refreshToken(string $refresh_token, array $options = []): array
     {
         return SpapiLwa::refreshToken(
-            $this->endpoint,
-            $refreshToken,
-            $this->clientId,
-            $this->clientSecret,
-            $this->user_agent
+            $this->base_uri,
+            $refresh_token,
+            $this->client_id,
+            $this->client_secret,
+            $this->user_agent,
+            array_merge($this->options, $options)
         );
     }
 
     /**
      * Use this for calling grantless operations. When specifying this value, include the scope parameter.
+     *
+     * @param  string  $scope    The scope of the LWA authorization grant. Values:
+     *                           - sellingpartnerapi::notifications. For the Notifications API.
+     *                           - sellingpartnerapi::client_credential:rotation. For the Application Management API.
+     * @param  array   $options  Merge curl options
      *
      * @return array{
      *      info: array{
@@ -195,14 +233,15 @@ class Lwa
      *  }
      * @link https://developer-docs.amazon.com/sp-api/docs/connecting-to-the-selling-partner-api#step-1-request-a-login-with-amazon-access-token
      */
-    public function clientCredentials($scope): array
+    public function clientCredentials(string $scope, array $options = []): array
     {
         return SpapiLwa::clientCredentials(
-            $this->endpoint,
+            $this->base_uri,
             $scope,
-            $this->clientId,
-            $this->clientSecret,
-            $this->user_agent
+            $this->client_id,
+            $this->client_secret,
+            $this->user_agent,
+            array_merge($this->options, $options)
         );
     }
 }
