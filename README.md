@@ -24,6 +24,8 @@
     - [getOrders](#getorders)
     - [getOrder](#getorder)
     - [getOrderItems](#getorderitems)
+- [Examples](#examples)
+    - [Get an order with a Restricted Data Token](#get-an-order-with-a-restricted-data-token)
 - [Local Development](./LOCAL_DEVELOPMENT.md)
 - [Contributing](#contributing)
 
@@ -198,6 +200,26 @@ echo $Order['response']['payload']['OrderItems'][0]['SellerSKU'];
 
 // Access errors.
 echo $Order['response']['errors']['code'];
+```
+
+## Examples
+
+### Get an order with a Restricted Data Token
+
+```php
+use Zerotoprod\Spapi\Lwa;use Zerotoprod\Spapi\Spapi;use Zerotoprod\Spapi\Tokens;
+
+$lwa = Lwa::from('amzn1.application-oa2-client.xxx','amzn1.oa2-cs.v1.xxx')
+    ->refreshToken('Atzr|xxx');
+
+$rdt = Tokens::from($lwa['response']['access_token'],'amzn1.sp.solution.xxx')
+    ->order('123-1234567-1234567', ['buyerInfo', 'shippingAddress']);
+
+$Spapi = Spapi::from($rdt['response']['restrictedDataToken']);
+
+$order_response = $Spapi->orders()->getOrder('111-5803802-7417822');
+
+$AmazonOrderId = $order_response['response']['payload']['AmazonOrderId'];
 ```
 
 ## Contributing
