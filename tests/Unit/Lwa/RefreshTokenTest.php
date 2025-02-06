@@ -10,9 +10,7 @@ use Zerotoprod\Spapi\Lwa;
 class RefreshTokenTest extends TestCase
 {
 
-    /**
-     * @test
-     */
+    /** @test */
     public function refreshToken(): void
     {
         $response = Lwa::from(
