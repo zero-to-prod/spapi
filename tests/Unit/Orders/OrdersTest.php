@@ -23,9 +23,7 @@ class OrdersTest extends TestCase
     private const TEST_ORDER_ID = 'test-order-id';
     private const TEST_MARKETPLACE_IDS = ['ATVPDKIKX0DER'];
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_creates_instance_with_minimal_parameters(): void
     {
         $orders = new Orders(
@@ -36,9 +34,7 @@ class OrdersTest extends TestCase
         $this->assertInstanceOf(Orders::class, $orders);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_creates_instance_with_all_parameters(): void
     {
         $options = ['timeout' => 30];
@@ -52,9 +48,7 @@ class OrdersTest extends TestCase
         $this->assertInstanceOf(Orders::class, $orders);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_gets_order_with_minimal_parameters(): void
     {
         $expectedResponse = ['orderId' => self::TEST_ORDER_ID];
@@ -67,9 +61,7 @@ class OrdersTest extends TestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_gets_order_with_options(): void
     {
         $instanceOptions = ['timeout' => 30];
@@ -92,9 +84,7 @@ class OrdersTest extends TestCase
         $orders->getOrder(self::TEST_ORDER_ID, $methodOptions);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_gets_orders_with_minimal_parameters(): void
     {
         $expectedResponse = ['orders' => []];
@@ -107,12 +97,8 @@ class OrdersTest extends TestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-    /**
-     * @test
-     */
-    /**
-     * @test
-     */
+    /** @test */
+    /** @test */
     public function it_gets_orders_with_all_parameters(): void
     {
         $params = [
@@ -218,9 +204,7 @@ class OrdersTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_gets_orders_with_options(): void
     {
         $instanceOptions = ['timeout' => 30];
@@ -244,9 +228,7 @@ class OrdersTest extends TestCase
         $orders->getOrders(self::TEST_MARKETPLACE_IDS, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, $methodOptions);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_marketplace_ids(): void
     {
         $this->expectException(TypeError::class);
@@ -255,9 +237,7 @@ class OrdersTest extends TestCase
         $orders->getOrders(null);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_marketplace_ids(): void
     {
         $this->expectException(TypeError::class);
@@ -266,9 +246,7 @@ class OrdersTest extends TestCase
         $orders->getOrders('not-an-array');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_string_order_id(): void
     {
         $this->expectException(TypeError::class);
@@ -277,9 +255,7 @@ class OrdersTest extends TestCase
         $orders->getOrder(null);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_options(): void
     {
         $this->expectException(TypeError::class);
