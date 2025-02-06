@@ -15,9 +15,7 @@ use Zerotoprod\Spapi\Lwa;
 class ClientCredentialsTest extends TestCase
 {
 
-    /**
-     * @test
-     */
+    /** @test */
     public function clientCredentials(): void
     {
         $response = Lwa::from(
