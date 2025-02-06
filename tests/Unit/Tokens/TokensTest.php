@@ -25,9 +25,7 @@ class TokensTest extends TestCase
     private const TEST_DATA_ELEMENTS = ['buyerInfo', 'shippingAddress'];
     private const TEST_DELEGATEE = 'test-delegatee';
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_creates_instance_with_minimal_parameters(): void
     {
         $tokens = new Tokens(self::TEST_ACCESS_TOKEN);
@@ -35,9 +33,7 @@ class TokensTest extends TestCase
         $this->assertInstanceOf(Tokens::class, $tokens);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_gets_token_for_specific_order(): void
     {
         $expectedResponse = ['restrictedDataToken' => 'new-token'];
@@ -56,9 +52,7 @@ class TokensTest extends TestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_gets_token_for_orders_endpoint(): void
     {
         $expectedResponse = ['restrictedDataToken' => 'new-token'];
@@ -77,9 +71,7 @@ class TokensTest extends TestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_merges_options_in_order_method(): void
     {
         $instanceOptions = ['timeout' => 30];
@@ -104,9 +96,7 @@ class TokensTest extends TestCase
         $tokens->order(self::TEST_ORDER_ID, $methodOptions);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_merges_options_in_orders_method(): void
     {
         $instanceOptions = ['timeout' => 30];
@@ -131,9 +121,7 @@ class TokensTest extends TestCase
         $tokens->orders($methodOptions);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_passes_data_elements_correctly(): void
     {
         $this->mockSpapiTokensStaticMethod('createRestrictedDataToken', [], function ($accessToken, $path, $dataElements) {
@@ -150,9 +138,7 @@ class TokensTest extends TestCase
         $tokens->orders();
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_passes_delegatee_correctly(): void
     {
         $this->mockSpapiTokensStaticMethod('createRestrictedDataToken', [], function ($accessToken, $path, $dataElements, $delegatee) {
@@ -170,27 +156,21 @@ class TokensTest extends TestCase
         $tokens->orders();
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_string_access_token(): void
     {
         $this->expectException(TypeError::class);
         new Tokens(null);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_data_elements(): void
     {
         $this->expectException(TypeError::class);
         new Tokens(self::TEST_ACCESS_TOKEN, 'not-an-array');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_array_options(): void
     {
         $this->expectException(TypeError::class);
@@ -204,9 +184,7 @@ class TokensTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_requires_string_order_id(): void
     {
         $tokens = new Tokens(self::TEST_ACCESS_TOKEN);
