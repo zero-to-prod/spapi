@@ -101,7 +101,6 @@ class TokensTest extends TestCase
         $this->expectException(TypeError::class);
         new Tokens(
             self::TEST_ACCESS_TOKEN,
-            [],
             null,
             self::TEST_BASE_URI,
             null,
