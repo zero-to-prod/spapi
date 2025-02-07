@@ -236,9 +236,9 @@ $rdt = Tokens::from($lwa['response']['access_token'],'amzn1.sp.solution.xxx')
 
 $Spapi = Spapi::from($rdt['response']['restrictedDataToken']);
 
-$order_response = $Spapi->orders()->getOrder('111-5803802-7417822');
+$response = $Spapi->orders()->getOrder('111-5803802-7417822');
 
-$Order = $order_response['response']['payload'];
+$Order = $response['response']['payload'];
 ```
 
 ## Contributing
