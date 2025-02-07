@@ -238,7 +238,7 @@ $Spapi = Spapi::from($rdt['response']['restrictedDataToken']);
 
 $order_response = $Spapi->orders()->getOrder('111-5803802-7417822');
 
-$AmazonOrderId = $order_response['response']['payload']['AmazonOrderId'];
+$Order = $order_response['response']['payload'];
 ```
 
 ## Contributing
