@@ -23,6 +23,7 @@
 - [Orders Api](#orders-api)
     - [getOrders](#getorders)
     - [getOrder](#getorder)
+    - [getOrderBuyerInfo](#getorderbuyerinfo)
     - [getOrderItems](#getorderitems)
 - [Examples](#examples)
     - [Get an order with a Restricted Data Token](#get-an-order-with-a-restricted-data-token)
@@ -125,7 +126,7 @@ your request. NextToken doesn't affect any filters that you include in your requ
 use Zerotoprod\Spapi\Spapi;
 
 // Access the orders api and get orders.
-$Order = Spapi::from($access_token)
+$Orders = Spapi::from($access_token)
     ->orders()
     ->getOrders(
       ['MarketplaceIds']
@@ -154,10 +155,10 @@ $Order = Spapi::from($access_token)
 );
 
 // Access the orders.
-echo $Order['response']['payload']['Orders'][0]['AmazonOrderId']
+echo $Orders['response']['payload']['Orders'][0]['AmazonOrderId']
 
 // Access errors.
-echo $Order['response']['errors']['code'];
+echo $Orders['response']['errors']['code'];
 ```
 
 ### getOrder
@@ -176,6 +177,24 @@ echo $Order['response']['payload']['AmazonOrderId'];
 
 // Access errors.
 echo $Order['response']['errors']['code'];
+```
+
+### getOrderBuyerInfo
+
+Returns buyer information for the order that you specify.
+
+```php
+use Zerotoprod\Spapi\Spapi;
+
+$OrderBuyerInfo = Spapi::from($access_token)
+    ->orders()
+    ->getOrderBuyerInfo('111-5803802-7417822', ['curl_options']);
+
+// Access the buyer info.
+echo $OrderBuyerInfo['response']['payload']['BuyerName'];
+
+// Access errors.
+echo $OrderBuyerInfo['response']['errors']['code'];
 ```
 
 ### getOrderItems
