@@ -156,7 +156,7 @@ class Tokens
      *
      * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
      */
-    public function order(string $order_id, array $dataElements = [], array $options = []): array
+    public function getOrder(string $order_id, array $dataElements = [], array $options = []): array
     {
         return SpapiTokens::createRestrictedDataToken(
             $this->access_token,
@@ -319,7 +319,7 @@ class Tokens
      *
      * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
      */
-    public function orderItems(string $order_id, array $dataElements = [], array $options = []): array
+    public function getOrderItems(string $order_id, array $dataElements = [], array $options = []): array
     {
         return SpapiTokens::createRestrictedDataToken(
             $this->access_token,
@@ -400,7 +400,7 @@ class Tokens
      *
      * @link https://developer-docs.amazon.com/sp-api/docs/tokens-api-v2021-03-01-reference
      */
-    public function orders(array $dataElements = [], array $options = []): array
+    public function getOrders(array $dataElements = [], array $options = []): array
     {
         return SpapiTokens::createRestrictedDataToken(
             $this->access_token,
