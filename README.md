@@ -92,9 +92,11 @@ use Zerotoprod\Spapi\Tokens;
 $response = Tokens::from(
     'access_token',                     // Access token received from LWA
     'amzn1.sp.solution.xxx'             // Target Application
-)->getOrder(
-    '123-1234567-1234567',              // Amazon Order Id
-    ['buyerInfo', 'shippingAddress']    // Restricted Data Elements to Access
+)
+    ->orders()
+    ->getOrder(
+        '123-1234567-1234567',           // Amazon Order Id
+        ['buyerInfo', 'shippingAddress'] // Restricted Data Elements to Access
 );
 
 $access_token = $response['response']['restrictedDataToken'];
@@ -232,6 +234,7 @@ $lwa = Lwa::from('amzn1.application-oa2-client.xxx','amzn1.oa2-cs.v1.xxx')
     ->refreshToken('Atzr|xxx');
 
 $rdt = Tokens::from($lwa['response']['access_token'],'amzn1.sp.solution.xxx')
+    ->orders()
     ->getOrder('123-1234567-1234567', ['buyerInfo', 'shippingAddress']);
 
 $response = Spapi::from($rdt['response']['restrictedDataToken'])

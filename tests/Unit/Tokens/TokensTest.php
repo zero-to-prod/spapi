@@ -47,7 +47,7 @@ class TokensTest extends TestCase
         });
 
         $tokens = new Tokens(self::TEST_ACCESS_TOKEN);
-        $response = $tokens->getOrder(self::TEST_ORDER_ID);
+        $response = $tokens->orders()->getOrder(self::TEST_ORDER_ID);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -66,7 +66,7 @@ class TokensTest extends TestCase
         });
 
         $tokens = new Tokens(self::TEST_ACCESS_TOKEN);
-        $response = $tokens->getOrders();
+        $response = $tokens->orders()->getOrders();
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -85,7 +85,7 @@ class TokensTest extends TestCase
             self::TEST_DELEGATEE
         );
 
-        $tokens->getOrders();
+        $tokens->orders()->getOrders();
     }
 
     /** @test */
@@ -114,7 +114,7 @@ class TokensTest extends TestCase
         $tokens = new Tokens(self::TEST_ACCESS_TOKEN);
 
         $this->expectException(TypeError::class);
-        $tokens->getOrder(null);
+        $tokens->orders()->getOrder(null);
     }
 
     private function mockSpapiTokensStaticMethod(string $method, array $return, callable $callback = null): void
