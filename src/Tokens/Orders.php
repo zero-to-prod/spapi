@@ -160,7 +160,7 @@ class Orders
     {
         return SpapiTokens::createRestrictedDataToken(
             $this->access_token,
-            '/orders/v0/orders/'.$order_id,
+            "/orders/v0/orders/$order_id",
             $dataElements,
             $this->targetApplication,
             $this->base_uri,
@@ -323,7 +323,7 @@ class Orders
     {
         return SpapiTokens::createRestrictedDataToken(
             $this->access_token,
-            '/orders/v0/orders/'.$order_id.'/orderItems',
+            "/orders/v0/orders/$order_id/orderItems",
             $dataElements,
             $this->targetApplication,
             $this->base_uri,
