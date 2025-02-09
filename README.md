@@ -24,6 +24,7 @@
     - [getOrders](#getorders)
     - [getOrder](#getorder)
     - [getOrderBuyerInfo](#getorderbuyerinfo)
+    - [getOrderAddress](#getorderaddress)
     - [getOrderItems](#getorderitems)
 - [Examples](#examples)
     - [Get an order with a Restricted Data Token](#get-an-order-with-a-restricted-data-token)
