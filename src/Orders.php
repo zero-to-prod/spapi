@@ -511,6 +511,137 @@ class Orders
     }
 
     /**
+     * Retrieves the shipping address for the specified order.
+     *
+     * Note: The `ShippingAddress` is only available for orders with the following status values: `Unshipped`, `PartiallyShipped`, `Shipped`, and `InvoiceUnconfirmed`.
+     * The `ShippingAddress` contains restricted data. Use the Restricted Data Token (RDT) and restricted SPDS roles to access fields such as `Name`, `AddressLine1`, `Phone`, etc.
+     *
+     * @param  string  $orderId  Amazon order ID
+     * @param  array   $options  Merge curl options.
+     *
+     * @return array{
+     *     info: array{
+     *         url: string,
+     *         content_type: string,
+     *         http_code: int,
+     *         header_size: int,
+     *         request_size: int,
+     *         filetime: int,
+     *         ssl_verify_result: int,
+     *         redirect_count: int,
+     *         total_time: float,
+     *         namelookup_time: float,
+     *         connect_time: float,
+     *         pretransfer_time: float,
+     *         size_upload: int,
+     *         size_download: int,
+     *         speed_download: int,
+     *         speed_upload: int,
+     *         download_content_length: int,
+     *         upload_content_length: int,
+     *         starttransfer_time: float,
+     *         redirect_time: float,
+     *         redirect_url: string,
+     *         primary_ip: string,
+     *         certinfo: array,
+     *         primary_port: int,
+     *         local_ip: string,
+     *         local_port: int,
+     *         http_version: int,
+     *         protocol: int,
+     *         ssl_verifyresult: int,
+     *         scheme: string,
+     *         appconnect_time_us: int,
+     *         connect_time_us: int,
+     *         namelookup_time_us: int,
+     *         pretransfer_time_us: int,
+     *         redirect_time_us: int,
+     *         starttransfer_time_us: int,
+     *         total_time_us: int
+     *     },
+     *     error: string,
+     *     headers: array{
+     *         Server: string,
+     *         Date: string,
+     *         Content-Type: string,
+     *         Content-Length: string,
+     *         Connection: string,
+     *         X-Amz-Rid: string,
+     *         X-Amzn-Ratelimit-Limit: string,
+     *         X-Amzn-Requestid: string,
+     *         X-Amz-Apigw-Id: string,
+     *         X-Amzn-Trace-Id: string,
+     *         Vary: string,
+     *         Strict-Transport-Security: string
+     *     },
+     *     response: array{
+     *         payload: array{
+     *             AmazonOrderId: string,
+     *             BuyerCompanyName?: string,
+     *             ShippingAddress: array{
+     *                 Name: string,
+     *                 AddressLine1: string,
+     *                 AddressLine2?: string,
+     *                 AddressLine3?: string,
+     *                 City: string,
+     *                 County?: string,
+     *                 District?: string,
+     *                 StateOrRegion: string,
+     *                 Municipality?: string,
+     *                 PostalCode: string,
+     *                 CountryCode: string,
+     *                 Phone?: string,
+     *                 AddressType?: string,
+     *                 ExtendedFields?: array{
+     *                     StreetName?: string,
+     *                     StreetNumber?: string,
+     *                     Complement?: string,
+     *                     Neighborhood?: string
+     *                 }
+     *             },
+     *             DeliveryPreferences?: array{
+     *                 DropOffLocation?: string,
+     *                 PreferredDeliveryTime?: array{
+     *                     BusinessHours?: array{
+     *                         DayOfWeek: string,
+     *                         OpenIntervals?: array{
+     *                             StartTime: array{Hour: int, Minute: int},
+     *                             EndTime: array{Hour: int, Minute: int}
+     *                         }
+     *                     },
+     *                     ExceptionDates?: array{
+     *                         ExceptionDate: string,
+     *                         IsOpen: bool,
+     *                         OpenIntervals?: array{
+     *                             StartTime: array{Hour: int, Minute: int},
+     *                             EndTime: array{Hour: int, Minute: int}
+     *                         }
+     *                     }
+     *                 },
+     *                 OtherAttributes?: array<string>,
+     *                 AddressInstructions?: string
+     *             }
+     *         }
+     *     }
+     * }
+     * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#get-ordersv0ordersorderidaddress
+     */
+    public function getOrderAddress(
+        string $orderId,
+        ?string $user_agent = null,
+        array $options = []
+    ): array {
+        return SpapiOrders::getOrderAddress(
+            $this->base_uri,
+            $this->access_token,
+            $orderId,
+            $this->user_agent,
+            array_merge($this->options, $options)
+        );
+    }
+
+
+    /**
      * Returns detailed order item information for the order that you specify. If NextToken is provided, it's used to retrieve the next page of order items.
      *
      * Note: When an order is in the Pending state (the order has been placed but payment has not been authorized), the getOrderItems operation does not return information about pricing, taxes, shipping charges, gift status or promotions for the order items in the order. After an order leaves the Pending state (this occurs when payment has been authorized) and enters the Unshipped, Partially Shipped, or Shipped state, the getOrderItems operation returns information about pricing, taxes, shipping charges, gift status and promotions for the order items in the order.
