@@ -628,7 +628,6 @@ class Orders
      */
     public function getOrderAddress(
         string $orderId,
-        ?string $user_agent = null,
         array $options = []
     ): array {
         return SpapiOrders::getOrderAddress(
