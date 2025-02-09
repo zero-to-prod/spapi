@@ -87,9 +87,10 @@ Use the access token received from [Login With Amazon](#refresh-token);
 
 ```php
 use Zerotoprod\Spapi\Tokens;
+use \Zerotoprod\SpapiRdt\SpapiRdt;
 
-// Use the Tokens API to get an RDT (Restricted Data Token)
-$response = Tokens::from(
+// Use the SpapiRdt API to get an RDT (Restricted Data Token)
+$response = SpapiRdt::from(
     'access_token',                     // Access token received from LWA
     'amzn1.sp.solution.xxx'             // Target Application
 )
@@ -199,6 +200,24 @@ echo $OrderBuyerInfo['response']['payload']['BuyerName'];
 echo $OrderBuyerInfo['response']['errors']['code'];
 ```
 
+### getOrderAddress
+
+Retrieves the shipping address for the specified order
+
+```php
+use Zerotoprod\Spapi\Spapi;
+
+$OrderBuyerInfo = Spapi::from($access_token)
+    ->orders()
+    ->getOrderAddress('111-5803802-7417822', ['curl_options']);
+
+// Access the buyer info.
+echo $OrderBuyerInfo['response']['payload']['BuyerName'];
+
+// Access errors.
+echo $OrderBuyerInfo['response']['errors']['code'];
+```
+
 ### getOrderItems
 
 Returns detailed order item information for the order that you specify. If NextToken is provided, it's used to retrieve the next page of order items.
@@ -228,12 +247,14 @@ echo $Order['response']['errors']['code'];
 ### Get an order with a Restricted Data Token
 
 ```php
-use Zerotoprod\Spapi\Lwa;use Zerotoprod\Spapi\Spapi;use Zerotoprod\Spapi\Tokens;
+use Zerotoprod\Spapi\Lwa;
+use Zerotoprod\Spapi\Spapi;
+use \Zerotoprod\SpapiRdt\SpapiRdt;
 
 $lwa = Lwa::from('amzn1.application-oa2-client.xxx','amzn1.oa2-cs.v1.xxx')
     ->refreshToken('Atzr|xxx');
 
-$rdt = Tokens::from($lwa['response']['access_token'],'amzn1.sp.solution.xxx')
+$rdt = SpapiRdt::from($lwa['response']['access_token'],'amzn1.sp.solution.xxx')
     ->orders()
     ->getOrder('123-1234567-1234567', ['buyerInfo', 'shippingAddress']);
 
