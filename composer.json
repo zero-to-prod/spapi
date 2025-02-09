@@ -36,9 +36,8 @@
     "ext-curl": "*",
     "ext-json": "*",
     "zero-to-prod/spapi-lwa": "^1.0",
-    "zero-to-prod/curl-helper": "^1.0",
     "zero-to-prod/spapi-orders": "^1.0",
-    "zero-to-prod/spapi-tokens": "^1.0"
+    "zero-to-prod/spapi-rdt": "^1.0"
   },
   "require-dev": {
     "mockery/mockery": "*",
