@@ -58,8 +58,9 @@ authorization from a selling partner. When specifying this value, include the rr
 
 ```php
 use Zerotoprod\Spapi\Lwa;
+use Zerotoprod\SpapiLwa\SpapiLwa;
 
-$response = Lwa::from(
+$response = SpapiLwa::from(
     'amzn1.application-oa2-client.xxx', // client_id
     'amzn1.oa2-cs.v1.xxx'               // client_secret
 )->refreshToken('refresh_token');       // The LWA refresh token. Get this value when the selling partner authorizes your application
@@ -73,8 +74,9 @@ Use this for calling grantless operations. When specifying this value, include t
 
 ```php
 use Zerotoprod\Spapi\Lwa;
+use Zerotoprod\SpapiLwa\SpapiLwa;
 
-$response = Lwa::from(
+$response = SpapiLwa::from(
     'amzn1.application-oa2-client.xxx', // client_id
     'amzn1.oa2-cs.v1.xxx',              // client_secret
 )->clientCredentials('scope');
@@ -248,11 +250,11 @@ echo $Order['response']['errors']['code'];
 ### Get an order with a Restricted Data Token
 
 ```php
-use Zerotoprod\Spapi\Lwa;
+use Zerotoprod\SpapiLwa\SpapiLwa;
 use Zerotoprod\Spapi\Spapi;
 use \Zerotoprod\SpapiRdt\SpapiRdt;
 
-$lwa = Lwa::from('amzn1.application-oa2-client.xxx','amzn1.oa2-cs.v1.xxx')
+$lwa = SpapiLwa::from('amzn1.application-oa2-client.xxx','amzn1.oa2-cs.v1.xxx')
     ->refreshToken('Atzr|xxx');
 
 $rdt = SpapiRdt::from($lwa['response']['access_token'],'amzn1.sp.solution.xxx')
