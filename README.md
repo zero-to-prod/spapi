@@ -62,7 +62,7 @@ use Zerotoprod\Spapi\Lwa;
 $response = Lwa::from(
     'amzn1.application-oa2-client.xxx', // client_id
     'amzn1.oa2-cs.v1.xxx'               // client_secret
-)->refreshToken();
+)->refreshToken('refresh_token');       // The LWA refresh token. Get this value when the selling partner authorizes your application
 
 $access_token = $response['response']['access_token'];
 ```
