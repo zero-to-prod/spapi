@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zerotoprod\Spapi;
 
+use Zerotoprod\SpapiOrders\SpapiOrders;
+
 /**
  * The Selling Partner API (SP-API) is a REST-based API
  * that helps Amazon selling partners programmatically
@@ -88,9 +90,9 @@ class Spapi
      *
      * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference
      */
-    public function orders(): Orders
+    public function orders(): SpapiOrders
     {
-        return new Orders(
+        return new SpapiOrders(
             $this->access_token,
             $this->base_uri,
             $this->user_agent,
