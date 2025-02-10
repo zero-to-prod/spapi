@@ -36,7 +36,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "zero-to-prod/spapi-lwa": "^2.0",
-    "zero-to-prod/spapi-orders": "^1.0",
+    "zero-to-prod/spapi-orders": "^2.0",
     "zero-to-prod/spapi-rdt": "^1.0"
   },
   "require-dev": {
