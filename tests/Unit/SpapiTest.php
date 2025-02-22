@@ -49,7 +49,7 @@ class SpapiTest extends TestCase
             ->getOrder('114-1576437-0127407')['response']['restrictedDataToken'];
     }
 
-    public function orderMethodsProvider(): array
+    public static function orderMethodsProvider(): array
     {
         return [
             'getOrders' => ['getOrders', ['getOrders']],
