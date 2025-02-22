@@ -32,6 +32,7 @@ class SpapiTest extends TestCase
     protected function setup(): void
     {
         parent::setUp();
+
         SpapiLwaFake::fake(
             SpapiLwaResponseFactory::factory()
                 ->asRefreshTokenResponse()
@@ -40,12 +41,10 @@ class SpapiTest extends TestCase
         SpapiRdtFake::fake(
             SpapiRdtResponseFactory::factory()->make()
         );
-
         $access_token = SpapiLwa::from(
             'client_id',
             'client_secret'
         )->refreshToken('refresh_token');
-
         $this->rdt = SpapiRdt::from(
             SpapiTokens::from(
                 $access_token['response']['access_token'],
@@ -56,24 +55,36 @@ class SpapiTest extends TestCase
             ->getOrder('114-1576437-0127407')['response']['restrictedDataToken'];
     }
 
-    /** @test */
-    public function fakes_response(): void
+    public function orderMethodsProvider(): array
     {
-        $AmazonOrderId = '114-1576437-0127407';
+        return [
+            'getOrders' => ['getOrders', ['getOrders']],
+            'getOrder' => ['getOrder', 'getOrder'],
+            'getOrderBuyerInfo' => ['getOrderBuyerInfo', 'getOrderBuyerInfo'],
+            'getOrderAddress' => ['getOrderAddress', 'getOrderAddress'],
+            'getOrderItems' => ['getOrderItems', 'getOrderItems'],
+            'getOrderItemsBuyerInfo' => ['getOrderItemsBuyerInfo', 'getOrderItemsBuyerInfo'],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider orderMethodsProvider
+     */
+    public function it_returns_correct_order_data(string $method, $args): void
+    {
         SpapiFake::fake(
             SpapiOrdersResponseFactory::factory()
-                ->set('response', ['payload' => ['AmazonOrderId' => $AmazonOrderId]])
+                ->set('response.payload', $args)
                 ->make()
         );
         $Spapi = Spapi::from($this->rdt);
 
-        $Order = $Spapi
-            ->orders()
-            ->getOrder($AmazonOrderId);
+        $Order = $Spapi->orders()->$method($args);
 
         self::assertEquals(
-            $AmazonOrderId,
-            $Order['response']['payload']['AmazonOrderId']
+            $args,
+            $Order['response']['payload']
         );
     }
 }
