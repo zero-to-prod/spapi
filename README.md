@@ -269,6 +269,79 @@ $response = Spapi::from($rdt['response']['restrictedDataToken'])
 $Order = $response['response']['payload'];
 ```
 
+## Testing
+
+### Basic Testing
+
+The package provides a robust testing framework using the `SpapiFake` class. This allows you to mock API responses without making actual HTTP requests.
+
+```php
+use Zerotoprod\Spapi\Support\Testing\SpapiFake;
+use Zerotoprod\SpapiOrders\Support\Testing\SpapiOrdersResponseFactory;
+
+// Mock the Spapi response
+SpapiFake::fake(
+    SpapiOrdersResponseFactory::factory()
+        ->set('response.payload', [
+            'AmazonOrderId' => '123-1234567-1234567'
+        ])
+        ->make()
+);
+
+// Use the API as normal
+$Spapi = Spapi::from('access_token');
+$response = $Spapi->orders()->getOrder('123-1234567-1234567');
+```
+
+### Testing with Authentication Flow
+
+For testing the complete authentication flow, you'll need to mock both LWA (Login with Amazon) and RDT (Restricted Data Token) responses:
+
+```php
+use Zerotoprod\SpapiLwa\Support\Testing\SpapiLwaFake;
+use Zerotoprod\SpapiLwa\Support\Testing\SpapiLwaResponseFactory;
+use Zerotoprod\SpapiRdt\Support\Testing\SpapiRdtFake;
+use Zerotoprod\SpapiRdt\Support\Testing\SpapiRdtResponseFactory;
+use Zerotoprod\SpapiLwa\SpapiLwa;
+use Zerotoprod\SpapiTokens\SpapiTokens;
+use Zerotoprod\SpapiRdt\SpapiRdt;
+
+// Mock LWA response
+SpapiLwaFake::fake(
+    SpapiLwaResponseFactory::factory()
+        ->asRefreshTokenResponse()
+        ->make()
+);
+
+// Mock RDT response
+SpapiRdtFake::fake(
+    SpapiRdtResponseFactory::factory()->make()
+);
+
+// Get access token (in production code)
+$access_token = SpapiLwa::from('client_id', 'client_secret')
+    ->refreshToken('refresh_token');
+
+// Get RDT token (in production code)
+$rdt = SpapiRdt::from(
+    SpapiTokens::from(
+        $access_token['response']['access_token'],
+        'app'
+    )
+)->orders()->getOrder('order-id')['response']['restrictedDataToken'];
+
+// Mock Spapi response
+SpapiFake::fake(
+    SpapiOrdersResponseFactory::factory()
+        ->set('response.payload', ['order_data'])
+        ->make()
+);
+
+// Make the API call (in production code)
+$Spapi = Spapi::from($rdt);
+$Order = $Spapi->orders()->getOrder('order-id');
+```
+
 ## Contributing
 
 Contributions, issues, and feature requests are welcome!
