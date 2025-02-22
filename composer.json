@@ -35,9 +35,10 @@
     "php": ">=7.1",
     "ext-curl": "*",
     "ext-json": "*",
-    "zero-to-prod/spapi-lwa": "^2.0",
-    "zero-to-prod/spapi-orders": "^2.0",
-    "zero-to-prod/spapi-rdt": "^1.0"
+    "zero-to-prod/spapi-lwa": "^4.0",
+    "zero-to-prod/spapi-orders": "^3.0",
+    "zero-to-prod/container": "^0.1.2",
+    "zero-to-prod/spapi-rdt": "^4.0"
   },
   "require-dev": {
     "mockery/mockery": "*",

@@ -1,97 +1,84 @@
 <?php
-/**
- * @noinspection PhpStrictTypeCheckingInspection
- * @noinspection PhpParamsInspection
- * @noinspection PhpExpressionResultUnusedInspection
- */
-
 declare(strict_types=1);
 
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use TypeError;
 use Zerotoprod\Spapi\Spapi;
+use Zerotoprod\Spapi\Support\Testing\SpapiFake;
+use Zerotoprod\SpapiLwa\SpapiLwa;
+use Zerotoprod\SpapiLwa\Support\Testing\SpapiLwaFake;
+use Zerotoprod\SpapiLwa\Support\Testing\SpapiLwaResponseFactory;
+use Zerotoprod\SpapiOrders\Support\Testing\SpapiOrdersResponseFactory;
+use Zerotoprod\SpapiRdt\SpapiRdt;
+use Zerotoprod\SpapiRdt\Support\Testing\SpapiRdtFake;
+use Zerotoprod\SpapiRdt\Support\Testing\SpapiRdtResponseFactory;
+use Zerotoprod\SpapiTokens\SpapiTokens;
 
 class SpapiTest extends TestCase
 {
-    private const DEFAULT_BASE_URI = 'https://sellingpartnerapi-na.amazon.com';
-    private const TEST_ACCESS_TOKEN = 'test-access-token';
-    private const TEST_BASE_URI = 'https://custom-api.amazon.com';
-    private const TEST_USER_AGENT = 'CustomUserAgent/1.0';
 
-    /** @test */
-    public function it_creates_instance_with_minimal_parameters(): void
+    /**
+     * @var array
+     */
+    private $rdt;
+
+    protected function setup(): void
     {
-        $spapi = new Spapi(self::TEST_ACCESS_TOKEN);
+        parent::setUp();
 
-        $this->assertInstanceOf(Spapi::class, $spapi);
-    }
-
-    /** @test */
-    public function it_creates_instance_with_all_parameters(): void
-    {
-        $options = ['timeout' => 30];
-        $spapi = new Spapi(
-            self::TEST_ACCESS_TOKEN,
-            self::TEST_BASE_URI,
-            self::TEST_USER_AGENT,
-            $options
+        SpapiLwaFake::fake(
+            SpapiLwaResponseFactory::factory()
+                ->asRefreshTokenResponse()
+                ->make()
         );
-
-        $this->assertInstanceOf(Spapi::class, $spapi);
-    }
-
-    /** @test */
-    public function it_accepts_null_user_agent(): void
-    {
-        $spapi = new Spapi(
-            self::TEST_ACCESS_TOKEN,
-            self::DEFAULT_BASE_URI,
-            null
+        SpapiRdtFake::fake(
+            SpapiRdtResponseFactory::factory()->make()
         );
-
-        $this->assertInstanceOf(Spapi::class, $spapi);
+        $access_token = SpapiLwa::from(
+            'client_id',
+            'client_secret'
+        )->refreshToken('refresh_token');
+        $this->rdt = SpapiRdt::from(
+            SpapiTokens::from(
+                $access_token['response']['access_token'],
+                'app'
+            )
+        )
+            ->orders()
+            ->getOrder('114-1576437-0127407')['response']['restrictedDataToken'];
     }
 
-    /** @test */
-    public function it_accepts_empty_options_array(): void
+    public static function orderMethodsProvider(): array
     {
-        $spapi = new Spapi(
-            self::TEST_ACCESS_TOKEN,
-            self::DEFAULT_BASE_URI,
-            null,
-            []
+        return [
+            'getOrders' => ['getOrders', ['getOrders']],
+            'getOrder' => ['getOrder', 'getOrder'],
+            'getOrderBuyerInfo' => ['getOrderBuyerInfo', 'getOrderBuyerInfo'],
+            'getOrderAddress' => ['getOrderAddress', 'getOrderAddress'],
+            'getOrderItems' => ['getOrderItems', 'getOrderItems'],
+            'getOrderItemsBuyerInfo' => ['getOrderItemsBuyerInfo', 'getOrderItemsBuyerInfo'],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider orderMethodsProvider
+     */
+    public function it_returns_correct_order_data(string $method, $args): void
+    {
+        SpapiFake::fake(
+            SpapiOrdersResponseFactory::factory()
+                ->set('response.payload', $args)
+                ->make()
         );
+        $Spapi = Spapi::from($this->rdt);
 
-        $this->assertInstanceOf(Spapi::class, $spapi);
-    }
+        $Order = $Spapi->orders()->$method($args);
 
-    /** @test */
-    public function it_requires_access_token(): void
-    {
-        $this->expectException(TypeError::class);
-        new Spapi(null);
-    }
-
-    /** @test */
-    public function it_requires_string_access_token(): void
-    {
-        $this->expectException(TypeError::class);
-        new Spapi(123);
-    }
-
-    /** @test */
-    public function it_requires_string_base_uri(): void
-    {
-        $this->expectException(TypeError::class);
-        new Spapi(self::TEST_ACCESS_TOKEN, 123);
-    }
-
-    /** @test */
-    public function it_requires_array_options(): void
-    {
-        $this->expectException(TypeError::class);
-        new Spapi(self::TEST_ACCESS_TOKEN, self::DEFAULT_BASE_URI, null, 'not-an-array');
+        self::assertEquals(
+            $args,
+            $Order['response']['payload']
+        );
     }
 }

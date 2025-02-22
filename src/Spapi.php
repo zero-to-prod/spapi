@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Zerotoprod\Spapi;
 
+use Zerotoprod\Container\Container;
+use Zerotoprod\Spapi\Contracts\SpapiInterface;
+use Zerotoprod\Spapi\Support\Testing\SpapiFake;
+use Zerotoprod\SpapiOrders\Contracts\SpapiOrdersInterface;
 use Zerotoprod\SpapiOrders\SpapiOrders;
 
 /**
+ * A PHP client library for Amazon's Selling Partner API.
+ *
  * The Selling Partner API (SP-API) is a REST-based API
  * that helps Amazon selling partners programmatically
  * access their data on orders, shipments, payments,
@@ -16,9 +22,10 @@ use Zerotoprod\SpapiOrders\SpapiOrders;
  * to customers, helping selling partners
  * grow their businesses.
  *
- * @link https://developer-docs.amazon.com/sp-api
+ * @see  https://developer-docs.amazon.com/sp-api
+ * @link https://github.com/zero-to-prod/spapi
  */
-class Spapi
+class Spapi implements SpapiInterface
 {
     /**
      * @var string
@@ -45,7 +52,8 @@ class Spapi
      * @param  string|null  $user_agent    The user-agent for the request. If none is supplied, a default one will be provided.
      * @param  array        $options       Curl options.
      *
-     * @link https://developer-docs.amazon.com/sp-api
+     * @see  https://developer-docs.amazon.com/sp-api
+     * @link https://github.com/zero-to-prod/spapi
      */
     public function __construct(
         string $access_token,
@@ -67,32 +75,31 @@ class Spapi
      * @param  string|null  $user_agent    The user-agent for the request. If none is supplied, a default one will be provided.
      * @param  array        $options       Curl options.
      *
-     * @link https://developer-docs.amazon.com/sp-api
+     * @see  https://developer-docs.amazon.com/sp-api
+     * @link https://github.com/zero-to-prod/spapi
      */
     public static function from(
         string $access_token,
         string $base_uri = 'https://sellingpartnerapi-na.amazon.com',
         ?string $user_agent = null,
         array $options = []
-    ): self {
-        return new self(
-            $access_token,
-            $base_uri,
-            $user_agent,
-            $options
-        );
+    ): SpapiInterface {
+        return Container::getInstance()->has(SpapiFake::class)
+            ? Container::getInstance()->get(SpapiFake::class)
+            : new self(
+                $access_token,
+                $base_uri,
+                $user_agent,
+                $options
+            );
     }
 
     /**
-     * Use the Orders Selling Partner API to programmatically retrieve order information. With this API,
-     * you can develop fast, flexible, and custom applications to manage order synchronization, perform
-     * order research, and create demand-based decision support tools.
-     *
-     * @link https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference
+     * @inheritDoc
      */
-    public function orders(): SpapiOrders
+    public function orders(): SpapiOrdersInterface
     {
-        return new SpapiOrders(
+        return SpapiOrders::from(
             $this->access_token,
             $this->base_uri,
             $this->user_agent,
