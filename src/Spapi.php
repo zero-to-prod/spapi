@@ -96,6 +96,7 @@ class Spapi implements SpapiInterface
 
     /**
      * @inheritDoc
+     * @link https://github.com/zero-to-prod/spapi
      */
     public function orders(): SpapiOrdersInterface
     {
